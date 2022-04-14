@@ -1,82 +1,88 @@
-// computers turn of choosing R, P, or S - returns computersChocie
+// player's choice
+const rock = document.querySelector('.rock');
+rock.addEventListener('click', ()=> {
+    singleRound(computerSelection(), "rock");
+})
+const paper = document.querySelector('.paper');
+paper.addEventListener('click', ()=> {
+    singleRound(computerSelection(), "paper");
+})
+const scissors = document.querySelector('.scissors');
+scissors.addEventListener('click', ()=> {
+    singleRound(computerSelection(), "scissors");
+})
+// removeEventListener 'click' from buttons
+
+// computer's choice
 function computerSelection() {
     const rock_paper_scissors = ['rock', 'paper', 'scissors'];
     const computersChoice = rock_paper_scissors[Math.floor(Math.random()*(rock_paper_scissors.length))];
     
     return computersChoice;
 }
+// function that plays a single round taking 2 parameters - computerChoice and playerChoice
+let gameNumber = document.querySelector('.gameNumber');
+let playerTurn = document.querySelector('.playerChoice');
+let computerTurn = document.querySelector('.computerChoice');
+let winner_headline = document.querySelector('.winner_headline');
+let score = document.querySelector('.score');
 
-// players input of choosing R, P, or S - returns userChoice
-function playerSelection() {
-    let playersChoice;
-    reattempt = true;
-    while(reattempt) {
-        playersChoice = prompt('Choose rock, paper, or scissors: ').toLowerCase();
-        if(playersChoice=='rock') {
-            reattempt = false;
-        }
-        else if(playersChoice=='paper') {
-            reattempt = false;
-        }
-        else if(playersChoice=='scissors') {
-            reattempt = false;
-        }
-        else continue;
-    }
-    return playersChoice;
-}
-// declaring playerScore and computerScore
 let playerScore = 0;
 let computerScore = 0;
 let gameCount = 0;
-let totalScore = 0;
-// this function will play a single round of RPS using 2 parameters: 
-// computerSelection and playerSelection
-function singleRound(computer, player) {
-    let playerChoice = document.querySelector('.playerChoice');
-    let computerChoice = document.querySelector('.computerChoice');
-    let winner = document.querySelector('.winner');
-    let score = document.querySelector('.score');
-    let gameNumber = document.querySelector('.gameNumber');
 
-    playerChoice.textContent = "You chose " + player + "!";
-    computerChoice.textContent = "Your computer chose " + computer + "!";
-    // if its a draw
-    if(computer==player) {
+function singleRound(computerChoice, playerChoice) {
+    
+    if(computerChoice == playerChoice) {
         gameCount += 1;
-        gameNumber.textContent = 'Game: ' + gameCount;
-        winner.textContent = "It's a tie!";
-        score.textContent = "Your score: " + playerScore + "\n" + "Computer score: " + computerScore;
-        totalScore = playerScore + computerScore;
-        return player + " ties " + computer + "! Human: " + playerScore + " Computer: " + computerScore;
-    }
-    // if computer has a win condition, will +1 to its score
-    else if((computer=='rock' && player=='scissors')
-            || (computer=='paper' && player=='rock')
-            || (computer=='scissors' && player=='paper')) {
+        gameNumber.textContent = "GAME: " + gameCount;
+        playerTurn.textContent = "PLAYER chose " + playerChoice + "!";
+        computerTurn.textContent = "COMPUTER chose " + computerChoice + "!";
+        winner_headline.textContent = "Tied!";
+        score.textContent = "PLAYER: " + playerScore + " " + "COMPUTER: " + computerScore;
+
+    } else if((computerChoice == "rock" && playerChoice == "scissors")
+           || (computerChoice == "paper" && playerChoice == "rock")
+           || (computerChoice == "scissors" && playerChoice == "paper")) {
         gameCount += 1;
-        gameNumber.textContent = 'Game: ' + gameCount;
-        winner.textContent = 'The Computer Won! '
         computerScore += 1;
-        score.textContent = "Your score: " + playerScore + "\n" + "Computer score: " + computerScore; 
-        totalScore = playerScore + computerScore;
-        return computer + " beats " + player + "! Human: " + playerScore + " Computer: " + computerScore;
-    }
-    else {
+        if(computerScore > 2) {
+            gameNumber.textContent = "GAME: " + gameCount;
+            playerTurn.textContent = "PLAYER chose " + playerChoice + "!";
+            computerTurn.textContent = "COMPUTER chose " + computerChoice + "!";
+            winner_headline.textContent = "-----COMPUTER WON BO5-----"
+            score.textContent = "PLAYER: " + playerScore + " " + "COMPUTER: " + computerScore;
+            //
+            return;
+            //
+        } else {
+            gameNumber.textContent = "GAME: " + gameCount;
+            playerTurn.textContent = "PLAYER chose " + playerChoice + "!";
+            computerTurn.textContent = "COMPUTER chose " + computerChoice + "!";
+            winner_headline.textContent = "COMPUTER Won!"
+            score.textContent = "PLAYER: " + playerScore + " " + "COMPUTER: " + computerScore;
+        }
+        
+    } else {
         gameCount += 1;
-        gameNumber.textContent = 'Game: ' + gameCount;
-        winner.textContent = 'You have won!';
         playerScore += 1;
-        score.textContent = "Your score: " + playerScore + "\n" + "Computer score: " + computerScore; 
-        totalScore = playerScore + computerScore;
-        return player + " beats " + computer + "! Human: " + playerScore + " Computer: " + computerScore;
+        if(playerScore > 2) {
+            gameNumber.textContent = "GAME: " + gameCount;
+            playerTurn.textContent = "PLAYER chose " + playerChoice + "!";
+            computerTurn.textContent = "COMPUTER chose " + computerChoice + "!";
+            winner_headline.textContent = "-----PLAYER WON BO5-----"
+            score.textContent = "PLAYER: " + playerScore + " " + "COMPUTER: " + computerScore;
+            //
+            return;
+            //
+        } else {
+        gameNumber.textContent = "GAME: " + gameCount;
+        playerTurn.textContent = "PLAYER chose " + playerChoice + "!";
+        computerTurn.textContent = "COMPUTER chose " + computerChoice + "!";
+        winner_headline.textContent = "PLAYER Won!"
+        score.textContent = "PLAYER: " + playerScore + " " + "COMPUTER: " + computerScore;
+        }
     }
 }
 
-function game() {
-    while(totalScore<5) {
-        console.log(singleRound(computerSelection(), playerSelection()));
-    }
-    if(playerScore > computerScore) return "Human Wins Round of 5!";
-    else return "Computer Wins Round of 5!";
-}
+
